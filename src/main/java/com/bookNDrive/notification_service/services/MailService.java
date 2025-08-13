@@ -1,6 +1,8 @@
 package com.bookNDrive.notification_service.services;
 
+import com.bookNDrive.notification_service.dtos.received.ForgotPassword;
+
 public interface MailService {
 
-    void sendMail(String userMail);
+    void sendForgotPasswordMail(ForgotPassword forgotPassword);
 }

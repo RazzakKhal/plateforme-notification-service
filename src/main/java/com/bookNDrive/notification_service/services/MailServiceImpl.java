@@ -1,5 +1,6 @@
 package com.bookNDrive.notification_service.services;
 
+import com.bookNDrive.notification_service.dtos.received.ForgotPassword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +15,13 @@ public class MailServiceImpl implements MailService{
     }
 
     @Override
-    public void sendMail (String userMail){
+    public void sendForgotPasswordMail (ForgotPassword forgotPassword){
         try{
-            // récupérer l'utilisateur
-            mailSender.sendForgotPassword(userMail);
+            mailSender.sendForgotPassword(forgotPassword);
 
         } catch (Exception e) {
             System.out.println("outch : " + e.getMessage());
         }
     }
+
 }

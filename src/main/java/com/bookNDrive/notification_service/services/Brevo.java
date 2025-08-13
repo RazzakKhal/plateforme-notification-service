@@ -1,5 +1,6 @@
 package com.bookNDrive.notification_service.services;
 
+import com.bookNDrive.notification_service.dtos.received.ForgotPassword;
 import com.bookNDrive.notification_service.records.BrevoEmail;
 import com.bookNDrive.notification_service.records.Recipient;
 import com.bookNDrive.notification_service.records.Sender;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -30,17 +30,18 @@ public class Brevo implements MailSender{
     @Value("${app.brevo.api-key}") String apiKey;
     private String sender = "secretariat@ask-autoecole.fr";
     private String plateformeName = "ASK Plateforme";
+    private String plateformeUrl = "https://ask-plateforme.fr/";
 
 
     @Override
-    public void sendForgotPassword(String recipient) throws Exception {
+    public void sendForgotPassword(ForgotPassword forgotPassword) throws Exception {
 
         var subject = "Reinitialisation Mot de passe";
-        var message = "<html><body><h1>Bonjour</h1><p>Votre nouveau mdp est : </p></body></html>";
+        var message = String.format("<html><body><h1>Bonjour</h1><p>Votre lien pour réinitialiser votre mot de passe : %s%s</p></body></html>", plateformeUrl,forgotPassword.token());
 
         BrevoEmail email = new BrevoEmail(
                 new Sender(plateformeName, sender),
-                List.of(new Recipient(recipient, "Destinataire")),
+                List.of(new Recipient(forgotPassword.mail(), "Destinataire")),
                 subject,
                 message
         );

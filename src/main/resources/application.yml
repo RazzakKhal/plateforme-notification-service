@@ -1,4 +1,18 @@
 spring:
+  cloud:
+    function:
+      definition: sendResetLink          # lie la fonction au binding
+    stream:
+      defaultBinder: kafka
+      kafka:
+        binder:
+          brokers:
+            - ${SPRING_KAFKA:localhost:29092}
+      bindings:
+        sendResetLink-in-0: # nom = <functionName>-in-0
+          destination: password-reset-requested   # topic à écouter
+          group: notification-service             # consumer group (obligatoire)
+          contentType: application/json
   rabbitmq:
     host: "localhost"
     port: 5672
