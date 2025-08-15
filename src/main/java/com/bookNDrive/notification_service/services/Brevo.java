@@ -30,7 +30,7 @@ public class Brevo implements MailSender{
     @Value("${app.brevo.api-key}") String apiKey;
     private String sender = "secretariat@ask-autoecole.fr";
     private String plateformeName = "ASK Plateforme";
-    private String plateformeUrl = "https://ask-plateforme.fr/";
+    private String plateformeUrl = "https://ask-plateforme.fr/reset-password/";
 
 
     @Override
@@ -61,6 +61,5 @@ public class Brevo implements MailSender{
 
         System.out.println("Code HTTP: " + response.statusCode());
         System.out.println("Réponse: " + response.body());
-        System.out.println("envoi à : "+apiKey);
     }
 }
