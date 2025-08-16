@@ -10,7 +10,7 @@ spring:
             - ${SPRING_KAFKA:localhost:29092}
       bindings:
         sendResetLink-in-0: # nom = <functionName>-in-0
-          destination: password-reset-requested   # topic à écouter
+          destination: password-reset-requested   # topic ï¿½ ï¿½couter
           group: notification-service             # consumer group (obligatoire)
           contentType: application/json
   rabbitmq:
