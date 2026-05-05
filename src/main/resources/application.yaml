@@ -69,3 +69,17 @@ info:
   app:
     name: "notification-service"
     description: "notification service microservice"
+
+logging:
+  file:
+    name: ${LOG_FILE_NAME:logs/notification-service.log}
+  structured:
+    format:
+      console: ecs
+      file: ecs
+    ecs:
+      service:
+        name: ${spring.application.name}
+        environment: ${SPRING_PROFILES_ACTIVE:local}
+  level:
+    root: INFO
