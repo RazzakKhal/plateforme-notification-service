@@ -6,6 +6,6 @@ import org.springframework.http.HttpStatus;
 public class NotificationSendFailedException extends ApiException {
 
     public NotificationSendFailedException(String message) {
-        super(message, "NOTIFICATION_SEND_FAILED", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        super(message, NotificationErrorCodes.NOTIFICATION_SEND_FAILED, HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 }

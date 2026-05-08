@@ -1,6 +1,7 @@
 package com.bookNDrive.notification_service.exceptions;
 
 import com.bookndrive.common.error.ApiException;
+import com.bookndrive.common.error.CommonErrorCodes;
 import com.bookndrive.common.error.ErrorResponseDto;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -35,7 +36,7 @@ class GlobalHandlerController {
                 .collect(Collectors.joining(", "));
 
         return ResponseEntity.badRequest()
-                .body(new ErrorResponseDto("VALIDATION_ERROR", message, HttpStatus.BAD_REQUEST.value()));
+                .body(new ErrorResponseDto(CommonErrorCodes.VALIDATION_ERROR, message, HttpStatus.BAD_REQUEST.value()));
     }
 
     @ExceptionHandler({
@@ -44,7 +45,7 @@ class GlobalHandlerController {
     })
     public ResponseEntity<ErrorResponseDto> handleBadRequest(Exception ex) {
         return ResponseEntity.badRequest()
-                .body(new ErrorResponseDto("BAD_REQUEST", ex.getMessage(), HttpStatus.BAD_REQUEST.value()));
+                .body(new ErrorResponseDto(CommonErrorCodes.BAD_REQUEST, ex.getMessage(), HttpStatus.BAD_REQUEST.value()));
     }
 
     @ExceptionHandler(Exception.class)
@@ -52,7 +53,7 @@ class GlobalHandlerController {
         LOGGER.error("Unhandled exception in notification-service", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponseDto(
-                        "INTERNAL_SERVER_ERROR",
+                        CommonErrorCodes.INTERNAL_SERVER_ERROR,
                         "Une erreur interne est survenue",
                         HttpStatus.INTERNAL_SERVER_ERROR.value()
                 ));
