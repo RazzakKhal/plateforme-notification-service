@@ -2,6 +2,7 @@ package com.bookNDrive.notification_service.services;
 
 import com.bookNDrive.notification_service.dtos.received.ForgotPassword;
 import com.bookNDrive.notification_service.exceptions.NotificationSendFailedException;
+import com.bookNDrive.notification_service.properties.BrevoProperties;
 import com.bookNDrive.notification_service.records.BrevoEmail;
 import com.bookNDrive.notification_service.records.Recipient;
 import com.bookNDrive.notification_service.records.Sender;
@@ -11,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -26,17 +26,12 @@ public class Brevo implements MailSender {
     private static final Logger log = LoggerFactory.getLogger(Brevo.class);
 
     private final HttpClient httpClient;
-
-    @Value("${app.brevo.api-key}")
-    String apiKey;
-
-    private final String sender = "secretariat@ask-autoecole.fr";
-    private final String plateformeName = "ASK Plateforme";
-    private final String plateformeUrl = "https://ask-plateforme.fr/reset-password/";
+    private final BrevoProperties brevoProperties;
 
     @Autowired
-    public Brevo(HttpClient httpClient) throws JsonProcessingException {
+    public Brevo(HttpClient httpClient, BrevoProperties brevoProperties) throws JsonProcessingException {
         this.httpClient = httpClient;
+        this.brevoProperties = brevoProperties;
     }
 
     @Override
@@ -45,12 +40,12 @@ public class Brevo implements MailSender {
         var subject = "Reinitialisation Mot de passe";
         var message = String.format(
                 "<html><body><h1>Bonjour</h1><p>Votre lien pour reinitialiser votre mot de passe : %s%s</p></body></html>",
-                plateformeUrl,
+                brevoProperties.plateformeUrl(),
                 forgotPassword.token()
         );
 
         BrevoEmail email = new BrevoEmail(
-                new Sender(plateformeName, sender),
+                new Sender(brevoProperties.plateformeName(), brevoProperties.sender()),
                 List.of(new Recipient(forgotPassword.mail(), "Destinataire")),
                 subject,
                 message
@@ -62,7 +57,7 @@ public class Brevo implements MailSender {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.brevo.com/v3/smtp/email"))
                 .header("accept", "application/json")
-                .header("api-key", apiKey)
+                .header("api-key", brevoProperties.apiKey())
                 .header("content-type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
