@@ -18,6 +18,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Checkout ask-bom
+        uses: actions/checkout@v4
+        with:
+          repository: razzakkhal/ask-bom
+          token: ${{ secrets.GH_PACKAGES_READ_TOKEN }}
+          path: ask-bom
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -73,6 +80,9 @@ jobs:
             </activeProfiles>
           </settings>
           EOF
+      - name: Install ask-bom and common locally
+        run: mvn -B -ntp -f ask-bom/pom.xml clean install -DskipTests
+
       - name: build and test and generate coverage
         run: mvn clean install
 
