@@ -35,6 +35,7 @@ jobs:
       - name: Configure Maven for GitHub Packages
         run: |
           mkdir -p ~/.m2
+          mkdir -p .mvn
           cat <<'EOF' > ~/.m2/settings.xml
           <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -80,6 +81,7 @@ jobs:
             </activeProfiles>
           </settings>
           EOF
+          cp ~/.m2/settings.xml .mvn/settings.xml
       - name: Install ask-bom and common locally
         run: mvn -B -ntp -f ask-bom/pom.xml clean install -DskipTests
 
